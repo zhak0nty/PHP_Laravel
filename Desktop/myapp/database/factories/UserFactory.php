@@ -27,6 +27,7 @@ class UserFactory extends Factory
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
+            'account_status' => 'active',
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
         ];
@@ -39,6 +40,27 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
+        ]);
+    }
+
+    public function suspended(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'account_status' => 'suspended',
+        ]);
+    }
+
+    public function incomplete(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'account_status' => 'incomplete',
+        ]);
+    }
+
+    public function unverifiedAccount(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'account_status' => 'unverified',
         ]);
     }
 }

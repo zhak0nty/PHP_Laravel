@@ -7,6 +7,19 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+## Assignment 5. Practice 2 — CheckAccountStatus Middleware
+
+Реализован middleware `CheckAccountStatus`, который:
+- Проверяет, что пользователь аутентифицирован
+- Проверяет, что аккаунт активен (status = `active`)
+- Редиректит неактивных пользователей (suspended, incomplete, unverified) на `/account/inactive`
+
+**Файлы:** `app/Http/Middleware/CheckAccountStatus.php`, миграция `account_status`, маршрут `/profile` защищён middleware.
+
+**Тест:** `/test-login/1` (активный) → профиль; `/test-login/2` (suspended) → страница неактивного аккаунта.
+
+---
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:

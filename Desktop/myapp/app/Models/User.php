@@ -21,7 +21,18 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'account_status',
     ];
+
+    public const STATUS_ACTIVE = 'active';
+    public const STATUS_SUSPENDED = 'suspended';
+    public const STATUS_INCOMPLETE = 'incomplete';
+    public const STATUS_UNVERIFIED = 'unverified';
+
+    public function isActive(): bool
+    {
+        return $this->account_status === self::STATUS_ACTIVE;
+    }
 
     /**
      * The attributes that should be hidden for serialization.
