@@ -13,6 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'check.account.status' => \App\Http\Middleware\CheckAccountStatus::class,
+            'article.create.allowed' => \App\Http\Middleware\EnsureUserRoleCanCreateArticles::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
