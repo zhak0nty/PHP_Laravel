@@ -7,16 +7,18 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## Assignment 5. Practice 2 — CheckAccountStatus Middleware
+## Assignment 5 — CheckAccountStatus
 
-Реализован middleware `CheckAccountStatus`, который:
-- Проверяет, что пользователь аутентифицирован
-- Проверяет, что аккаунт активен (status = `active`)
-- Редиректит неактивных пользователей (suspended, incomplete, unverified) на `/account/inactive`
+Middleware `CheckAccountStatus`: доступ только при `account_status = active`, иначе редирект на `/account/inactive`. Подключён к защищённым маршрутам (dashboard, articles, profile).
 
-**Файлы:** `app/Http/Middleware/CheckAccountStatus.php`, миграция `account_status`, маршрут `/profile` защищён middleware.
+## Assignment 6 — CRUD: Users & Articles (Breeze, Policies, RBAC)
 
-**Тест:** `/test-login/1` (активный) → профиль; `/test-login/2` (suspended) → страница неактивного аккаунта.
+- **Аутентификация:** [Laravel Breeze](https://laravel.com/docs/starter-kits) (Blade).
+- **Роли:** `user` (по умолчанию при регистрации) и `moderator` (колонка `users.role`).
+- **User:** полный CRUD **только своих** статей; список статей — только свои.
+- **Moderator:** просмотр, редактирование и удаление **любых** статей; **создавать** статьи нельзя (политика `ArticlePolicy` + middleware `article.create.allowed`).
+- **Политики:** `app/Policies/ArticlePolicy.php`; валидация: `StoreArticleRequest`, `UpdateArticleRequest`.
+- **Демо-аккаунты** (после `php artisan db:seed --class=ArticleDemoSeeder`): `user@example.com` / `password`, `moderator@example.com` / `password`.
 
 ---
 

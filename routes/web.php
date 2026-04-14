@@ -1,32 +1,29 @@
 <?php
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/account/inactive', function () {
-    $status = session('status', 'inactive');
-    return view('account-inactive', ['status' => $status]);
-})->name('account.inactive');
+Route::middleware(['auth', 'verified', 'check.account.status'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
 
-Route::get('/profile', [ProfileController::class, 'index'])
-    ->middleware('check.account.status');
+    Route::get('/account/inactive', function () {
+        $status = session('status', 'inactive');
 
-// --- Тестовые маршруты (удалить в продакшене) ---
-Route::get('/test-login/{id}', function (int $id) {
-    $user = \App\Models\User::find($id);
-    if (!$user) {
-        return "User #{$id} not found. Run: php artisan tinker -> User::factory()->create()";
-    }
-    Auth::login($user);
-    return redirect('/profile')->with('success', "Logged in as {$user->email} (status: {$user->account_status})");
+        return view('account-inactive', ['status' => $status]);
+    })->name('account.inactive');
+
+    Route::resource('articles', ArticleController::class);
+
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/test-logout', function () {
-    Auth::logout();
-    return redirect('/')->with('success', 'Logged out');
-});
+require __DIR__.'/auth.php';
