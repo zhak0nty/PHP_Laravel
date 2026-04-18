@@ -1,12 +1,16 @@
 <?php
 
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::resource('authors', AuthorController::class)
+    ->only(['index', 'create', 'store', 'show']);
 
 Route::middleware(['auth', 'verified', 'check.account.status'])->group(function () {
     Route::get('/dashboard', function () {

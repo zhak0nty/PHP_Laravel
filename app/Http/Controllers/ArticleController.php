@@ -6,13 +6,17 @@ use App\Http\Requests\StoreArticleRequest;
 use App\Http\Requests\UpdateArticleRequest;
 use App\Models\Article;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\View\View;
 
-class ArticleController extends Controller
+class ArticleController extends Controller implements HasMiddleware
 {
-    public function __construct()
+    public static function middleware(): array
     {
-        $this->middleware('article.create.allowed')->only(['create', 'store']);
+        return [
+            new Middleware('article.create.allowed', only: ['create', 'store']),
+        ];
     }
 
     public function index(): View

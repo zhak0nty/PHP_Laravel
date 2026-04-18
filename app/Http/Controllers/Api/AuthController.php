@@ -14,7 +14,8 @@ class AuthController extends Controller
     public function login(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'email' => ['required', 'email'],
+            // Use string+lowercase validation to avoid heavy DNS/email parser dependency issues.
+            'email' => ['required', 'string', 'lowercase'],
             'password' => ['required', 'string'],
         ]);
 
